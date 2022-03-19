@@ -49,4 +49,5 @@ The fields in these files are as follows:
 
 Note that, for the CASP data, we were unable to access native structures for targets T1085 and T1086, so output accuracies are unavailable for these targets. In general, numeric values are set to -1 when they are not applicable (for instance, the input TM Score for a line representing AlphaFold's behavior with no template input).  
 
-
+The rosetta decoy set can be found here:
+https://files.ipd.uw.edu/pub/decoyset/decoys.zip
