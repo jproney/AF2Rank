@@ -1,2 +1,2 @@
-# AF2GAN
+# af2gan
 Coming soon...
