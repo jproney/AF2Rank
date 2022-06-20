@@ -1,7 +1,7 @@
 # AF2Rank
 
 Code for the paper "State-of-the-Art Estimation of Protein
-Model Accuracy using AlphaFold" (https://www.biorxiv.org/content/10.1101/2022.03.11.484043v3.full.pdf). Experiments were run using the latest AlphaFold github commit as of 5/16/2022 (https://github.com/deepmind/alphafold on commit`b85ffe10799ca08cc62146f1dabb4e4ee6c0a580`).
+Model Accuracy using AlphaFold" (https://www.biorxiv.org/content/10.1101/2022.03.11.484043v3). Experiments were run using the latest AlphaFold github commit as of 5/16/2022 (https://github.com/deepmind/alphafold on commit`b85ffe10799ca08cc62146f1dabb4e4ee6c0a580`).
 
 The script `test_templates.py` was used to run the evaluations in the paper for both the Rosetta decoy set and CASP. At a high level, this script takes a series of decoy structures, and uses AlphaFold to rank them by predicted accuracy. Its command line arguments and behavior are as follows:
 
