@@ -285,7 +285,7 @@ Decoy = namedtuple("Decoy", decoy_fields_list)
 # headers for csv outputs
 csv_headers = decoy_fields_list + ['output_path', 'rmsd_out', 'tm_diff', 'tm_out', 'plddt', 'ptm']
 
-def write_results(decoy, af_result, prot_native=None, mismatch=False):
+def write_results(decoy, af_result, prot_native=None, pdb_native=None, mismatch=False):
   plddt = float(af_result['pLDDT'])
   ptm = float(af_result["pTMscore"])
   if prot_native is None:
@@ -303,7 +303,7 @@ def write_results(decoy, af_result, prot_native=None, mismatch=False):
   else:
     tm_diff = -1
 
-  if prot_native is None:
+  if pdb_native is None:
     tm_out = -1
   else:
     tm_out = compute_tmscore(pdb_out_path, pdb_native)
@@ -400,14 +400,14 @@ for n in natives_list:
     result = parse_results(runner.predict(features, random_seed=args.seed), features)
 
     dummy_decoy = Decoy(target=n, decoy_id="none.pdb", decoy_path="_", rmsd=-1, rosettascore=-1, gdt_ts=-1, tmscore=-1,danscore=-1)
-    write_results(dummy_decoy, result, prot_native=prot_native if args.use_native else None)
+    write_results(dummy_decoy, result, prot_native=prot_native if args.use_native else None, pdb_native=pdb_native if args.use_native else None)
 
 
   # run the model with all of the decoys passed as templates
   for d in decoy_dict[n]:
     prot = protein.from_pdb_string(pdb_to_string(d.decoy_path))
     result, mismatch = score_decoy(seq_native, prot, runner, d.target + "_" + d.decoy_id)
-    write_results(d, result, prot_native=prot_native if args.use_native else None, mismatch=mismatch)
+    write_results(d, result, prot_native=prot_native if args.use_native else None, pdb_native=pdb_native if args.use_native else None, mismatch=mismatch)
 
 
   with open(args.output_dir + args.name + "/finished_targets.txt", 'a') as f:
