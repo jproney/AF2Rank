@@ -182,7 +182,7 @@ def score_decoy(target_seq, decoy_prot, model_runner, name):
 
   mismatch = False
   if decoy_seq_in == target_seq:
-    assert jnp.all(prot.residue_index - 1 == np.arange(len(target_seq)))
+    assert jnp.all(decoy_prot.residue_index - 1 == np.arange(len(target_seq)))
   else: # case when template is missing some residues
     if args.verbose:
       print("Sequece mismatch: {}".format(name))
@@ -191,7 +191,7 @@ def score_decoy(target_seq, decoy_prot, model_runner, name):
     assert "".join(target_seq[i-1] for i in decoy_prot.residue_index) == decoy_seq_in 
   
   # use this to index into the template features
-  template_idxs = prot.residue_index-1
+  template_idxs = decoy_prot.residue_index-1
   template_idx_set = set(template_idxs)
 
   # The sequence associated with the decoy. Always has same length as target sequence.
@@ -216,7 +216,7 @@ def score_decoy(target_seq, decoy_prot, model_runner, name):
     cbs = np.array([extend(c,n,ca, 1.522, 1.927, -2.143) for c, n ,ca in zip(pos[0,:,2], pos[0,:,0], pos[0,:,1])])
 
     pos[0, projected_cb, 3] = cbs[projected_cb]
-    atom_mask[0, template_idxs, :5] = prot.atom_mask[:, :5]
+    atom_mask[0, template_idxs, :5] = decoy_prot.atom_mask[:, :5]
     atom_mask[0, projected_cb, 3] = 1
 
     template = {"template_aatype":residue_constants.sequence_to_onehot(decoy_seq, residue_constants.HHBLITS_AA_TO_ID)[None],
@@ -240,8 +240,8 @@ def score_decoy(target_seq, decoy_prot, model_runner, name):
                 "template_all_atom_positions":decoy_prot.atom_positions[None],
                 "template_domain_names":np.asarray(["None"])}
 
-  features = make_processed_feature_dict(runner, target_seq, name=name, templates=template, seed=args.seed)
-  result = parse_results(runner.predict(features, random_seed=args.seed), features)
+  features = make_processed_feature_dict(model_runner, target_seq, name=name, templates=template, seed=args.seed)
+  result = parse_results(model_runner.predict(features, random_seed=args.seed), features)
   return result, mismatch
 
 
@@ -286,14 +286,14 @@ Decoy = namedtuple("Decoy", decoy_fields_list)
 csv_headers = decoy_fields_list + ['output_path', 'rmsd_out', 'tm_diff', 'tm_out', 'plddt', 'ptm']
 
 def write_results(decoy, af_result, prot_native=None, mismatch=False):
-  plddt = float(result['pLDDT'])
-  ptm = float(result["pTMscore"])
+  plddt = float(af_result['pLDDT'])
+  ptm = float(af_result["pTMscore"])
   if prot_native is None:
     rms_out = -1
   else:
-    rms_out = jnp_rmsd(prot_native.atom_positions[:,1,:], result['unrelaxed_protein'].atom_positions[:,1,:])
+    rms_out = jnp_rmsd(prot_native.atom_positions[:,1,:], af_result['unrelaxed_protein'].atom_positions[:,1,:])
 
-  pdb_lines = protein.to_pdb(result["unrelaxed_protein"])
+  pdb_lines = protein.to_pdb(af_result["unrelaxed_protein"])
   pdb_out_path = args.output_dir + args.name + "/pdbs/" + decoy.target + "_" + decoy.decoy_id
   with open(pdb_out_path, 'w') as f:
     f.write(pdb_lines)
