@@ -25,7 +25,7 @@ The script `test_templates.py` was used to run the evaluations in the paper for 
 ## Example Usage:
 
 ```
-python main.py [name] --targets_file [list of targets] --seed 1 --recycles 1 --decoy_dir [decoy directory] --seq_replacement - --mask_sidechains_add_cb
+python main.py [name] --targets_file [list of targets] --seed 1 --recycles 1 --decoy_dir [decoy directory] --seq_replacement - --mask_sidechains_add_cb --use_native
 ```
 
 This will run the script with the gap token for the template sequence and the side chains masked, which was the configuration used for the results in the paper.
