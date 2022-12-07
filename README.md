@@ -16,6 +16,7 @@ The script `test_templates.py` was used to run the evaluations in the paper for 
 * `recycles` -- the number of recycles to run AlphaFold with (desults to 1). The total number of iterations through the model is `args.recycles + 1`.
 * `seed` -- the random seed to use (defaults to 0)
 * `deterministic` -- run the model in a deterministic way (no sequence masking, etc).
+* `use_native` -- add the native structure as a decoy and score it like the others.
 * `verbose` -- print extra information.
 * `seq_relacement` -- the character to use for the sequnece of the decoy structures. Defaults to "", which uses the target sequence.
 * `mask_sidechains` -- mask out all of the sidechain atoms aside from CB.
