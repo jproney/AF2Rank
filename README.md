@@ -21,6 +21,14 @@ The script `test_templates.py` was used to run the evaluations in the paper for 
 * `mask_sidechains` -- mask out all of the sidechain atoms aside from CB.
 * `mask_sidechains_add_cb` -- mask out all of the sidechain atoms aside from CB, and add CB atoms to the glycines so that all residues have the same atomic structure (use with the gap sequence so that we don't leak information about which residues are glycines).
 
+## Example Usage:
+
+```
+python main.py [name] --targets_file [list of targets] --seed 1 --recycles 1 --decoy_dir [decoy directory] --seq_replacement - --mask_sidechains_add_cb
+```
+
+This will run the script with the gap token for the template sequence and the side chains masked, which was the configuration used for the results in the paper.
+
 # Directory Structure
 
 ## The decoy dataset directory specified by `decoy_dir` should have the following structure:
@@ -79,6 +87,12 @@ The rosetta decoy set can be found here:
 https://files.ipd.uw.edu/pub/decoyset/decoys.zip
 
 Some extra `.txt` files have been added to this dataset. The full set of `.txt` files can be found here: https://drive.google.com/drive/folders/1ew0Y8N55U--2m9fIWm9gJTuKC1LzN9K2?usp=sharing
+
+# Notebook
+
+To run AF2Rank in Google Colab, take a look at this notebook: 
+
+https://colab.research.google.com/github/sokrypton/ColabDesign/blob/main/af/examples/AF2Rank.ipynb#scrollTo=UCUZxJdbBjZt
 
 # Update to previous version (5/23/2022)
 
